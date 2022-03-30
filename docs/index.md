@@ -1,5 +1,10 @@
 This is a fixed (well not yet, but I'm working on it) fork of [toxicracker's DiscordUtils](https://github.com/toxicrecker/DiscordUtils)
 
+<p id="idk"></p>
+<script>
+document.getElementById("idk").innerHTML = "will this Work?" 
+</script>
+
 # DiscordUtils
 A very useful library made to be used with [discord.py](https://pypi.org/project/discord.py/)
 
