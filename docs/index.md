@@ -1,5 +1,8 @@
 This is a fixed (well not yet, but I'm working on it) fork of [toxicracker's DiscordUtils](https://github.com/toxicrecker/DiscordUtils)
 
+[asd](/examples)
+<a href="/examples">asd</a>
+
 # DiscordUtils
 A very useful library made to be used with [discord.py](https://pypi.org/project/discord.py/)
 
