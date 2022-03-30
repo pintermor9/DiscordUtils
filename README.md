@@ -20,9 +20,7 @@ Requires discord.py[voice] so make sure you have all dependencies of it installe
 # [Examples](/examples)
 
 # Links
-**[Documentation](https://docs.discordutils.gq)**
-
-**[Github](https://github.discordutils.gq)**
+**[Documentation](DiscordUtils.github.io)**
 
 # Support
 **__Please make sure that you are on the latest version of [DiscordUtils](https://pypi.org/project/DiscordUtils) and [youtube_dl](https://pypi.org/project/youtube_dl) before contacting for support__**
