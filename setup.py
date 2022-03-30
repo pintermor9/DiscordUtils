@@ -6,11 +6,11 @@ with open("README.md", "r", encoding="utf-8", errors="ignore") as fh:
 setuptools.setup(
     name="DiscordUtils",
     version="1.3.4",
-    author="toxicrecker",
+    author="pintermor9",
     description="DiscordUtils is a very useful library made to be used with discord.py",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://www.github.com/toxicrecker/DiscordUtils",
+    url="https://github.com/pintermor9/DiscordUtils/",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
