@@ -20,9 +20,9 @@ Requires discord.py[voice] so make sure you have all dependencies of it installe
 # [Examples](/examples)
 
 # Links
-**[Documentation](DiscordUtils.github.io)**
+**[Documentation](https://pintermor9.github.io/DiscordUtils/)**
 
 # Support
-**__Please make sure that you are on the latest version of [DiscordUtils](https://pypi.org/project/DiscordUtils) and [youtube_dl](https://pypi.org/project/youtube_dl) before contacting for support__**
+**__Please make sure that you are on the latest version of [DiscordUtils](https://github.com/pintermor9/DiscordUtils) and [youtube_dl](https://pypi.org/project/youtube_dl) before contacting for support__**
 
 DM/PM `GFIZ Auxea#8304` on Discord for support
