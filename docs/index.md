@@ -28,7 +28,7 @@ DM `GFIZ Auxea#8304` on Discord for support.
 
 <!-- Load sidebar -->
 <script defer>
-var sidebar = document.querySelector("header>p")
-sidebar.innerHTML = "<ul><li>el1</li><li> dhdgskdb</li></ul><br /> it works" 
+var sidebar = document.querySelector("header")
+sidebar.innerHTML = sidebar.innerHTML + "<ul><li>el1</li><li> dhdgskdb</li></ul><br /> it works" 
 </script>
 
