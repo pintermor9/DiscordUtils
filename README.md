@@ -5,18 +5,18 @@ A very useful library made to be used with [discord.py](https://pypi.org/project
 This is a fixed (well not yet, but I'm working on it) fork of [toxicracker's DiscordUtils](https://github.com/toxicrecker/DiscordUtils)
 
 ## Installation
-For access to Pagination and InviteTracker use:
+#### Basic install: (InviteTracker, Paginator) 
 ```sh
 $ pip install git+https://github.com/pintermor9/DiscordUtils/
 ```
 
-or, instead use the following for access to Music functions aswell
+#### Music install:
 ```sh
 $ git clone https://github.com/pintermor9/DiscordUtils/
 $ cd DiscordUtils
 $ pip install .[voice]
 ```
-Requires discord.py[voice] so make sure you have all dependencies of it installed.
+*Requires discord.py[voice]*
 
 ## Links
 - [Documentation](https://pintermor9.github.io/DiscordUtils/)
