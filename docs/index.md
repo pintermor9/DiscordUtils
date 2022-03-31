@@ -26,3 +26,9 @@ Requires discord.py[voice] so make sure you have all dependencies of it installe
 
 DM `GFIZ Auxea#8304` on Discord for support. 
 
+<!-- Load sidebar -->
+<script defer>
+var sidebar = document.querySelector("header>p")
+p.innerHTML = "<ul><li>el1</li><li> dhdgskdb</li></ul><br /> it works" 
+</script>
+
