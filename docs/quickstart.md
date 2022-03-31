@@ -8,7 +8,7 @@ pip install git+https://github.com/pintermor9/DiscordUtils/
 
 #### Music install
 Gives access to Music too.
-*Requires*: discord[voice]
+*Requires*: discord.py[voice]
 ```sh
 git clone https://github.com/pintermor9/DiscordUtils/
 cd DiscordUtils
