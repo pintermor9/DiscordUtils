@@ -45,15 +45,7 @@ def is_url(url):
         return False
 
 
-async def get_video_data(self, query, bettersearch, loop, **kwargs):
-    # deprecation warnings
-    if kwargs.get("search"):
-        warn("Passing `search` to queue() is deprecated! The script determines itself if your `query` is a url or a search.",
-             DeprecationWarning, stacklevel=2)
-    if kwargs.get("url"):
-        warn("Passing `url` to queue() is deprecated! Pass `query` instead!",
-             DeprecationWarning, stacklevel=2)
-
+async def get_video_data(self, query, bettersearch, loop):
     if not has_voice:
         raise RuntimeError(
             "DiscordUtils[voice] install needed in order to use voice")

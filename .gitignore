@@ -1,2 +1,3 @@
-
-DiscordUtils/test.py
+test.py
+__pycache__
+*.py[cod]

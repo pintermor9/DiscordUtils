@@ -3,19 +3,20 @@ from discord import AuditLogAction
 from datetime import datetime
 from asyncio import sleep
 
+
 class InviteTracker():
     def __init__(self, bot):
         self.bot = bot
         self._cache = {}
         self.add_listeners()
-    
+
     def add_listeners(self):
         self.bot.add_listener(self.cache_invites, "on_ready")
         self.bot.add_listener(self.update_invite_cache, "on_invite_create")
         self.bot.add_listener(self.remove_invite_cache, "on_invite_delete")
         self.bot.add_listener(self.add_guild_cache, "on_guild_join")
         self.bot.add_listener(self.remove_guild_cache, "on_guild_remove")
-    
+
     async def cache_invites(self):
         for guild in self.bot.guilds:
             try:
@@ -24,12 +25,12 @@ class InviteTracker():
                     self._cache[guild.id][invite.code] = invite
             except Forbidden:
                 continue
-    
+
     async def update_invite_cache(self, invite):
         if invite.guild.id not in self._cache.keys():
             self._cache[invite.guild.id] = {}
         self._cache[invite.guild.id][invite.code] = invite
-    
+
     async def remove_invite_cache(self, invite):
         if invite.guild.id not in self._cache.keys():
             return
@@ -48,18 +49,18 @@ class InviteTracker():
                 return
         else:
             self._cache[invite.guild.id].pop(invite.code)
-    
+
     async def add_guild_cache(self, guild):
         self._cache[guild.id] = {}
         for invite in await guild.invites():
             self._cache[guild.id][invite.code] = invite
-    
+
     async def remove_guild_cache(self, guild):
         try:
             self._cache.pop(guild.id)
         except KeyError:
             return
-    
+
     async def fetch_inviter(self, member):
         await sleep(self.bot.latency)
         for new_invite in await member.guild.invites():
