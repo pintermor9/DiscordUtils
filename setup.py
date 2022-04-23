@@ -1,6 +1,13 @@
 import setuptools
 import disutils
 
+dependencies = ["aiohttp"] 
+try:
+    import discord
+    del discord
+except:
+    dependencies.append("discord.py") 
+
 with open("README.md", "r", encoding="utf-8", errors="ignore") as f:
     long_description = f.read()
 
@@ -20,6 +27,6 @@ setuptools.setup(
     ],
     python_requires=">= 3.6",
     include_package_data=True,
-    install_requires=["discord.py"],
-    extras_require={"voice": ["discord.py[voice]", "youtube-dl"]},
+    install_requires=dependencies,
+    extras_require={"voice": dependencies+["youtube-dl"]},
 )
