@@ -1,4 +1,4 @@
-# DiscordUtils
+# disutils
 
 A very useful library made to be used with [discord.py](https://pypi.org/project/discord.py/)
 
@@ -9,14 +9,14 @@ This is a fixed and enhanced fork of [toxicracker's DiscordUtils](https://github
 #### Basic install: (InviteTracker, Paginator)
 
 ```sh
-$ pip install git+https://github.com/pintermor9/DiscordUtils/
+$ pip install git+https://github.com/pintermor9/disutils/
 ```
 
 #### Music install:
 
 ```sh
-$ git clone https://github.com/pintermor9/DiscordUtils/
-$ cd DiscordUtils
+$ git clone https://github.com/pintermor9/disutils/
+$ cd disutils
 $ pip install .[voice]
 ```
 
@@ -24,11 +24,11 @@ _Requires discord.py[voice]_
 
 ## Links
 
-- [Documentation](https://pintermor9.github.io/DiscordUtils/)
-- [Examples](https://github.com/pintermor9/DiscordUtils/tree/master/examples)
+- [Documentation](https://pintermor9.github.io/disutils/)
+- [Examples](https://github.com/pintermor9/disutils/tree/master/examples)
 
 ## Support
 
-**Please make sure that you are on the latest version of [DiscordUtils](https://github.com/pintermor9/DiscordUtils) and [youtube_dl](https://pypi.org/project/youtube_dl) before contacting for support!**
+**Please make sure that you are on the latest version of [disutils](https://github.com/pintermor9/disutils) and [youtube_dl](https://pypi.org/project/youtube_dl) before contacting for support!**
 
 DM `GFIZ Auxea#8304` on Discord for support.
