@@ -1,4 +1,3 @@
-from importlib_metadata import version
 from . import Pagination
 from .InviteTracker import InviteTracker
 from .Music import Music, EmptyQueue, NotConnectedToVoice, NotPlaying
