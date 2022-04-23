@@ -18,9 +18,7 @@ async def leave(ctx):
 
 @bot.command()
 async def play(ctx, *, url):
-    player = music.get_player(guild_id=ctx.guild.id)
-    if not player:
-        player = music.create_player(ctx, ffmpeg_error_betterfix=True)
+    player = music.get_player(ctx)
     if not ctx.voice_client.is_playing():
         await player.queue(url, search=True)
         song = await player.play()
@@ -32,28 +30,28 @@ async def play(ctx, *, url):
 
 @bot.command()
 async def pause(ctx):
-    player = music.get_player(guild_id=ctx.guild.id)
+    player = music.get_player(ctx)
     song = await player.pause()
     await ctx.send(f"Paused {song.name}")
 
 
 @bot.command()
 async def resume(ctx):
-    player = music.get_player(guild_id=ctx.guild.id)
+    player = music.get_player(ctx)
     song = await player.resume()
     await ctx.send(f"Resumed {song.name}")
 
 
 @bot.command()
 async def stop(ctx):
-    player = music.get_player(guild_id=ctx.guild.id)
+    player = music.get_player(ctx)
     await player.stop()
     await ctx.send("Stopped")
 
 
 @bot.command()
 async def loop(ctx):
-    player = music.get_player(guild_id=ctx.guild.id)
+    player = music.get_player(ctx)
     song = await player.toggle_song_loop()
     if song.is_looping:
         await ctx.send(f"Enabled loop for {song.name}")
@@ -63,20 +61,20 @@ async def loop(ctx):
 
 @bot.command()
 async def queue(ctx):
-    player = music.get_player(guild_id=ctx.guild.id)
+    player = music.get_player(ctx)
     await ctx.send(f"{', '.join([song.name for song in player.current_queue()])}")
 
 
 @bot.command()
-async def np(ctx):
-    player = music.get_player(guild_id=ctx.guild.id)
+async def now(ctx):
+    player = music.get_player(ctx)
     song = player.now_playing()
     await ctx.send(song.name)
 
 
 @bot.command()
 async def skip(ctx):
-    player = music.get_player(guild_id=ctx.guild.id)
+    player = music.get_player(ctx)
     data = await player.skip(force=True)
     if len(data) == 2:
         await ctx.send(f"Skipped from {data[0].name} to {data[1].name}")
@@ -86,7 +84,7 @@ async def skip(ctx):
 
 @bot.command()
 async def volume(ctx, vol):
-    player = music.get_player(guild_id=ctx.guild.id)
+    player = music.get_player(ctx)
     # volume should be a float between 0 to 1
     song, volume = await player.change_volume(float(vol) / 100)
     await ctx.send(f"Changed volume for {song.name} to {volume*100}%")
@@ -94,6 +92,6 @@ async def volume(ctx, vol):
 
 @bot.command()
 async def remove(ctx, index):
-    player = music.get_player(guild_id=ctx.guild.id)
+    player = music.get_player(ctx)
     song = await player.remove_from_queue(int(index))
     await ctx.send(f"Removed {song.name} from queue")
