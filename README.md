@@ -1,6 +1,6 @@
 # disutils
 
-A very useful library made to be used with [discord.py](https://pypi.org/project/discord.py/)
+A very useful library made to be used with [discord.py or pycord](https://pypi.org/project/discord.py/)
 
 This is a fixed and enhanced fork of [toxicracker's DiscordUtils](https://github.com/toxicrecker/DiscordUtils)
 
@@ -9,15 +9,13 @@ This is a fixed and enhanced fork of [toxicracker's DiscordUtils](https://github
 #### Basic install: (InviteTracker, Paginator)
 
 ```sh
-$ pip install git+https://github.com/pintermor9/disutils/
+$ pip install disutils
 ```
 
 #### Music install:
 
 ```sh
-$ git clone https://github.com/pintermor9/disutils/
-$ cd disutils
-$ pip install .[voice]
+$ pip install disutils[voice]
 ```
 
 _Requires discord.py[voice]_
