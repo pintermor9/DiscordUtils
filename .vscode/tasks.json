@@ -6,7 +6,8 @@
         {
             "label": "upload",
             "type": "shell",
-            "command": "python3 setup.py sdist && twine upload dist/*"
+            "command": "python3 setup.py sdist && twine upload dist/*",
+            "problemMatcher": []
         }
     ]
 }
