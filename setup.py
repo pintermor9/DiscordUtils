@@ -1,12 +1,7 @@
 import setuptools
 import disutils
 
-dependencies = ["aiohttp"]
-try:
-    import discord
-    del discord
-except ImportError:
-    dependencies.append("discord.py")
+dependencies = ["discord.py", "aiohttp"]
 
 with open("README.md", "r", encoding="utf-8", errors="ignore") as f:
     long_description = f.read()
