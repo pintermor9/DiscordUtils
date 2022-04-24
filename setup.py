@@ -1,16 +1,24 @@
 import setuptools
+import disutils
 
-with open("README.md", "r", encoding="utf-8", errors="ignore") as fh:
-    long_description = fh.read()
+dependencies = ["aiohttp"] 
+try:
+    import discord
+    del discord
+except:
+    dependencies.append("discord.py") 
+
+with open("README.md", "r", encoding="utf-8", errors="ignore") as f:
+    long_description = f.read()
 
 setuptools.setup(
-    name="DiscordUtils",
-    version="1.3.4",
+    name="disutils",
+    version=disutils.__version__,
     author="pintermor9",
-    description="DiscordUtils is a very useful library made to be used with discord.py",
+    description="disutils is a very useful library made to be used with discord.py",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pintermor9/DiscordUtils/",
+    url="https://github.com/pintermor9/disutils/",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -19,6 +27,6 @@ setuptools.setup(
     ],
     python_requires=">= 3.6",
     include_package_data=True,
-    install_requires=["discord.py"],
-    extras_require={"voice": ["discord.py[voice]", "youtube-dl"]}
+    install_requires=dependencies,
+    extras_require={"voice": dependencies+["youtube-dl"]},
 )
