@@ -4,9 +4,8 @@ import disutils
 dependencies = ["aiohttp"]
 try:
     import discord
-
     del discord
-except:
+except ImportError:
     dependencies.append("discord.py")
 
 with open("README.md", "r", encoding="utf-8", errors="ignore") as f:
