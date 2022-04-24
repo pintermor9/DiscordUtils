@@ -3,6 +3,7 @@ import asyncio
 from discord.ext import commands
 
 
+# TODO REWRITE THIS THING TOOOOOOO
 class AutoEmbedPaginator(object):
     def __init__(self, ctx, **kwargs):
         self.embeds = None

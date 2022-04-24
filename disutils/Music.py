@@ -93,7 +93,8 @@ def is_url(url):
 async def get_video_data(self, query, bettersearch, loop) -> Song:
     """This gets the video data from youtube.com and returns it as a Song object"""
     if not has_voice:
-        raise RuntimeError("disutils[voice] install needed in order to use voice")
+        raise RuntimeError(
+            "disutils[voice] install needed in order to use voice")
 
     if not is_url(query) and not bettersearch:
         ytdl_ = youtube_dl.YoutubeDL(
@@ -142,46 +143,42 @@ async def get_video_data(self, query, bettersearch, loop) -> Song:
     )
 
 
-# TODO: Rewrite this whole shit
-def check_queue(ctx, opts, music, after, loop):
+def play_next(ctx, opts, music, after, loop):
     if not has_voice:
-        raise RuntimeError("disutils[voice] install needed in order to use voice")
+        raise RuntimeError(
+            "disutils[voice] install needed in order to use voice")
+
     try:
-        queue = music.get_player(ctx).song_queue
-    except NotConnectedToVoice:
-        return
-    try:
+        player = music.get_player(ctx)
+        queue = player.song_queue
         song = queue[0]
-    except IndexError:
+    except NotConnectedToVoice or IndexError:
         return
-    if not song.is_looping:
+
+    if song.is_looping:
+        source = discord.PCMVolumeTransformer(
+            discord.FFmpegPCMAudio(queue[0].source, **opts))
+        ctx.voice_client.play(
+            source, after=lambda _e: after(ctx, opts, music, after, loop))
+    else:
         try:
             queue.pop(0)
         except IndexError:
+            player.stop()
             return
+
         if len(queue) > 0:
             source = discord.PCMVolumeTransformer(
-                discord.FFmpegPCMAudio(queue[0].source, **opts)
-            )
+                discord.FFmpegPCMAudio(queue[0].source, **opts))
             ctx.voice_client.play(
-                source,
-                after=lambda error: after(ctx, opts, music, after, loop),
-            )
-            song = queue[0]
-    else:
-        source = discord.PCMVolumeTransformer(
-            discord.FFmpegPCMAudio(queue[0].source, **opts)
-        )
-        ctx.voice_client.play(
-            source, after=lambda error: after(ctx, opts, music, after, loop)
-        )
-        song = queue[0]
+                source, after=lambda _e: after(ctx, opts, music, after, loop))
 
 
 class Music(object):
     def __init__(self):
         if not has_voice:
-            raise RuntimeError("disutils[voice] install needed in order to use voice")
+            raise RuntimeError(
+                "disutils[voice] install needed in order to use voice")
         self.players = []  # List of MusicPlayers
 
     def create_player(self, ctx, **kwargs):
@@ -199,31 +196,20 @@ class Music(object):
             if player.voice_client.channel == ctx.voice_client.channel:
                 return player
         return self.create_player(ctx)
-        # for player in self.players:
-        #     if (
-        #         and player.ctx.guild.id == guild
-        #         and player.voice.channel.id == channel
-        #     ):
-        #         return player
-        #     elif not guild and channel and player.voice.channel.id == channel:
-        #         return player
-        #     elif not channel and guild and player.ctx.guild.id == guild:
-        #         return player
-        # else:
-        #     return None
 
 
 class MusicPlayer(object):
     def __init__(self, ctx, music):
         if not has_voice:
-            raise RuntimeError("disutils[voice] install needed in order to use voice")
+            raise RuntimeError(
+                "disutils[voice] install needed in order to use voice")
         self.ctx = ctx
         self.voice_client = ctx.voice_client
         self.loop = ctx.bot.loop
         self.bot = ctx.bot
         self.music = music
         self.song_queue = []
-        self.after_func = check_queue
+        self.after_func = play_next
         self.ffmpeg_options = {
             "options": "-vn -loglevel quiet -hide_banner -nostats",
             "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 0 -nostdin",
@@ -231,8 +217,6 @@ class MusicPlayer(object):
 
     def disable(self):
         self.music.players.remove(self)
-
-    # TODO: Rewrite the event stuff using discords builtin events (bot.dispatch)
 
     async def queue(self, query, bettersearch=True):
         song = await get_video_data(self, query, bettersearch, self.loop)
@@ -242,7 +226,8 @@ class MusicPlayer(object):
 
     async def play(self):
         source = discord.PCMVolumeTransformer(
-            discord.FFmpegPCMAudio(self.song_queue[0].source, **self.ffmpeg_options)
+            discord.FFmpegPCMAudio(
+                self.song_queue[0].source, **self.ffmpeg_options)
         )
         self.voice_client.play(
             source,
@@ -265,9 +250,7 @@ class MusicPlayer(object):
             raise EmptyQueue("Cannot skip because queue is empty")
         else:
             old = self.song_queue[0]
-            old.is_looping = (
-                False if old.is_looping else False
-            )  # WTF ITS ALWAYS FALSE ! FIX THIS LATER TODO
+            old.is_looping = True if old.is_looping else False
             self.voice_client.stop()
             try:
                 new = self.song_queue[1]
