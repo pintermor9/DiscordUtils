@@ -157,7 +157,7 @@ def play_next(ctx, opts, music, after, loop):
 
     if song.is_looping:
         source = discord.PCMVolumeTransformer(
-            discord.FFmpegPCMAudio(queue[0].source, **opts))
+            discord.FFmpegPCMAudio(queue[0].source, **opts), player.volume)
         ctx.voice_client.play(
             source, after=lambda _e: after(ctx, opts, music, after, loop))
     else:
@@ -169,7 +169,7 @@ def play_next(ctx, opts, music, after, loop):
 
         if len(queue) > 0:
             source = discord.PCMVolumeTransformer(
-                discord.FFmpegPCMAudio(queue[0].source, **opts))
+                discord.FFmpegPCMAudio(queue[0].source, **opts), player.volume)
             ctx.voice_client.play(
                 source, after=lambda _e: after(ctx, opts, music, after, loop))
 
