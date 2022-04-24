@@ -313,7 +313,8 @@ class MusicPlayer(object):
         try:
             song = self.song_queue[0]
         except:
-            raise NotPlaying("Cannot loop because nothing is being played")
+            raise NotPlaying(
+                "Cannot change volume because nothing is being played")
         self.bot.dispatch("disutils_music_volume_change", self.ctx, song, vol)
         return (song, vol)
 
