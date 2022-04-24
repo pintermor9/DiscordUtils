@@ -40,32 +40,21 @@ class NotPlaying(Exception):
 
 
 class Song(object):
-    def __init__(
-        self,
-        source,
-        url,
-        title,
-        description,
-        likes,
-        views,
-        duration,
-        thumbnail,
-        channel,
-        channel_url,
-        is_looping,
-    ):
+    def __init__(self, source: str, data: dict):
         self.source = source
-        self.url = url
-        self.title = title
-        self.description = description
-        self.likes = likes
-        self.views = views
-        self.name = title
-        self.duration = duration
-        self.thumbnail = thumbnail
-        self.channel = channel
-        self.channel_url = channel_url
-        self.is_looping = is_looping
+        self.data = data
+        self.is_looping = False
+
+    def __getattribute__(self, __name: str):
+        """Get the attribute from self or from self.data"""
+        try:
+            return super().__getattribute__(__name)
+        except AttributeError:
+            try:
+                return self.data[__name]
+            except KeyError:
+                raise AttributeError(
+                    f"'{__name}' is not an attribute of {self} nor a key of {self.data}")
 
 
 async def ytbettersearch(query):
@@ -129,19 +118,7 @@ async def get_video_data(self, query, bettersearch, loop) -> Song:
             None, lambda: ytdl.extract_info(url, download=False)
         )
 
-    return Song(
-        data["url"],
-        "https://www.youtube.com/watch?v=" + data["id"],
-        data["title"],
-        data["description"],
-        data["like_count"],
-        data["view_count"],
-        data["duration"],
-        data["thumbnail"],
-        data["uploader"],
-        data["uploader_url"],
-        False,
-    )
+    return Song(data["url"], data)
 
 
 def play_next(ctx, opts, music, after, loop):
