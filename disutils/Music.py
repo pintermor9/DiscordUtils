@@ -1,3 +1,4 @@
+from warnings import warn
 import aiohttp
 import re
 
@@ -144,6 +145,7 @@ async def get_video_data(self, query, bettersearch, loop) -> Song:
 
 
 def play_next(ctx, opts, music, after, loop):
+    """This should not be called directly!"""
     if not has_voice:
         raise RuntimeError(
             "disutils[voice] install needed in order to use voice")
@@ -182,6 +184,8 @@ class Music(object):
         self.players = []  # List of MusicPlayers
 
     def create_player(self, ctx, **kwargs):
+        """This creates a new MusicPlayer. 
+        This should not be called directly as the new update creates a new player with the get_player method if there is none."""
         if not ctx.voice_client:
             raise NotConnectedToVoice(
                 "Cannot create the player because bot is not connected to voice"
@@ -216,16 +220,15 @@ class MusicPlayer(object):
             "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 0 -nostdin",
         }
 
-    def disable(self):
-        self.music.players.remove(self)
-
     async def queue(self, query, bettersearch=True):
+        """Adds the query to the queue"""
         song = await get_video_data(self, query, bettersearch, self.loop)
         self.song_queue.append(song)
         self.bot.dispatch("disutils_music_queue", self.ctx, song)
         return song
 
     async def play(self):
+        """This plays the first song in the queue"""
         source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(
             self.song_queue[0].source, **self.ffmpeg_options), self.volume)
         self.voice_client.play(
@@ -242,7 +245,8 @@ class MusicPlayer(object):
         self.bot.dispatch("disutils_music_play", self.ctx, song)
         return song
 
-    async def skip(self, force=False):
+    async def skip(self, force=True):
+        """This skips the current song"""
         if len(self.song_queue) == 0:
             raise NotPlaying("Cannot loop because nothing is being played")
         elif not len(self.song_queue) > 1 and not force:
@@ -260,6 +264,7 @@ class MusicPlayer(object):
                 return old
 
     async def stop(self):
+        """Stops the player and clears the queue"""
         try:
             self.song_queue = []
             self.voice_client.stop()
@@ -269,6 +274,7 @@ class MusicPlayer(object):
         self.bot.dispatch("disutils_music_stop", self.ctx)
 
     async def pause(self):
+        """Pauses the player"""
         try:
             self.voice_client.pause()
             song = self.song_queue[0]
@@ -278,6 +284,7 @@ class MusicPlayer(object):
         return song
 
     async def resume(self):
+        """Resumes the player if it is paused"""
         try:
             self.voice_client.resume()
             song = self.song_queue[0]
@@ -287,15 +294,19 @@ class MusicPlayer(object):
         return song
 
     def current_queue(self):
+        warn("player.current_queue() is deprecated, use player.song_queue instead",
+             DeprecationWarning, stacklevel=2)
         return self.song_queue
 
     def now_playing(self):
+        """Returns the song that is currently playing"""
         try:
             return self.song_queue[0]
         except:
             return None
 
     async def toggle_song_loop(self):
+        """Toggles the current songs looping"""
         try:
             song = self.song_queue[0]
         except:
@@ -308,6 +319,7 @@ class MusicPlayer(object):
         return song
 
     async def change_volume(self, vol: float):
+        """Changes the volume of the player"""
         self.voice_client.source.volume = self.volume = vol
         try:
             song = self.song_queue[0]
@@ -318,6 +330,7 @@ class MusicPlayer(object):
         return (song, vol)
 
     async def remove_from_queue(self, index):
+        """Removes a song from the queue"""
         if index == 0:
             try:
                 song = self.song_queue[0]
@@ -329,6 +342,3 @@ class MusicPlayer(object):
         self.song_queue.pop(index)
         self.bot.dispatch("disutils_music_remove_from_queue", self.ctx, song)
         return song
-
-    def delete(self):
-        self.music.players.remove(self)
