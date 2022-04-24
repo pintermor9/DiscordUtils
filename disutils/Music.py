@@ -210,6 +210,7 @@ class MusicPlayer(object):
         self.music = music
         self.song_queue = []
         self.after_func = play_next
+        self.volume = 1.0
         self.ffmpeg_options = {
             "options": "-vn -loglevel quiet -hide_banner -nostats",
             "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 0 -nostdin",
@@ -225,10 +226,8 @@ class MusicPlayer(object):
         return song
 
     async def play(self):
-        source = discord.PCMVolumeTransformer(
-            discord.FFmpegPCMAudio(
-                self.song_queue[0].source, **self.ffmpeg_options)
-        )
+        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(
+            self.song_queue[0].source, **self.ffmpeg_options), self.volume)
         self.voice_client.play(
             source,
             after=lambda error: self.after_func(
@@ -308,8 +307,8 @@ class MusicPlayer(object):
         self.bot.dispatch("disutils_music_toggle_loop", self.ctx, song)
         return song
 
-    async def change_volume(self, vol):
-        self.voice_client.source.volume = vol
+    async def change_volume(self, vol: float):
+        self.voice_client.source.volume = self.volume = vol
         try:
             song = self.song_queue[0]
         except:
