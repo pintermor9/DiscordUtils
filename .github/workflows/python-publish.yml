@@ -1,6 +1,9 @@
+name: Publish Python Package
+
 on:
   release:
-     [publish]
+    types: [published]
+ 
 
 jobs:
   deploy:
