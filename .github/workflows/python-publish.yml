@@ -1,3 +1,7 @@
+on:
+  release:
+     [publish]
+
 jobs:
   deploy:
     defaults:
