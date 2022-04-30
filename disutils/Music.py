@@ -1,3 +1,4 @@
+import random
 from warnings import warn
 import aiohttp
 import re
@@ -38,6 +39,10 @@ class NotConnectedToVoice(Exception):
 
 class NotPlaying(Exception):
     """Cannot <do something> because nothing is being played"""
+
+
+class YoutubeError(Exception):
+    pass
 
 
 # ANCHOR Song
@@ -119,6 +124,8 @@ async def get_video_data(self, query, bettersearch, loop) -> Song:
         data = await loop.run_in_executor(
             None, lambda: ytdl.extract_info(url, download=False)
         )
+        if data is None:
+            raise YoutubeError()
 
     return Song(data["url"], data)
 
@@ -131,7 +138,7 @@ def play_next(ctx, opts, music, after, loop):
 
     try:
         player = music.get_player(ctx)
-        queue = player.song_queue
+        queue = player._song_queue
         song = queue[0]
     except NotConnectedToVoice or IndexError:
         return
@@ -193,25 +200,33 @@ class MusicPlayer(object):
         self.loop = ctx.bot.loop
         self.bot = ctx.bot
         self.music = music
-        self.song_queue = []
+        self._song_queue = []
         self.after_func = play_next
-        self.volume = 1.0
+        self.volume = .5
         self.ffmpeg_options = {
             "options": "-vn -loglevel quiet -hide_banner -nostats",
             "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 0 -nostdin",
         }
 
+    @property
+    def song_queue(self):
+        return self._song_queue[1:]
+
+    @property
+    def is_playing(self):
+        return self.voice_client.is_playing()
+
     async def queue(self, query, bettersearch=True):
         """Adds the query to the queue"""
         song = await get_video_data(self, query, bettersearch, self.loop)
-        self.song_queue.append(song)
+        self._song_queue.append(song)
         self.bot.dispatch("disutils_music_queue", self.ctx, song)
         return song
 
     async def play(self):
         """This plays the first song in the queue"""
         source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(
-            self.song_queue[0].source, **self.ffmpeg_options), self.volume)
+            self._song_queue[0].source, **self.ffmpeg_options), self.volume)
         self.voice_client.play(
             source,
             after=lambda error: self.after_func(
@@ -222,32 +237,32 @@ class MusicPlayer(object):
                 self.loop,
             ),
         )
-        song = self.song_queue[0]
+        song = self._song_queue[0]
         self.bot.dispatch("disutils_music_play", self.ctx, song)
         return song
 
     async def skip(self, force=True):
         """This skips the current song"""
-        if len(self.song_queue) == 0:
+        if len(self._song_queue) == 0:
             raise NotPlaying("Cannot loop because nothing is being played")
-        elif not len(self.song_queue) > 1 and not force:
+        elif not len(self._song_queue) > 1 and not force:
             raise EmptyQueue("Cannot skip because queue is empty")
         else:
-            old = self.song_queue[0]
+            old = self._song_queue[0]
             old.is_looping = True if old.is_looping else False
             self.voice_client.stop()
             try:
-                new = self.song_queue[1]
+                new = self._song_queue[1]
                 self.bot.dispatch("disutils_music_skip", self.ctx, old, new)
                 return (old, new)
             except IndexError:
-                self.bot.dispatch("disutils_music_skip", self.ctx, old)
-                return old
+                self.bot.dispatch("disutils_music_skip", self.ctx, old, None)
+                return (old, None)
 
     async def stop(self):
         """Stops the player and clears the queue"""
         try:
-            self.song_queue = []
+            self._song_queue = []
             self.voice_client.stop()
             self.music.players.remove(self)
         except:
@@ -258,7 +273,7 @@ class MusicPlayer(object):
         """Pauses the player"""
         try:
             self.voice_client.pause()
-            song = self.song_queue[0]
+            song = self._song_queue[0]
         except:
             raise NotPlaying("Cannot pause because nothing is being played")
         self.bot.dispatch("disutils_music_pause", self.ctx, song)
@@ -268,7 +283,7 @@ class MusicPlayer(object):
         """Resumes the player if it is paused"""
         try:
             self.voice_client.resume()
-            song = self.song_queue[0]
+            song = self._song_queue[0]
         except:
             raise NotPlaying("Cannot resume because nothing is being played")
         self.bot.dispatch("disutils_music_resume", self.ctx, song)
@@ -277,19 +292,19 @@ class MusicPlayer(object):
     def current_queue(self):
         warn("player.current_queue() is deprecated, use player.song_queue instead",
              DeprecationWarning, stacklevel=2)
-        return self.song_queue
+        return self._song_queue
 
     def now_playing(self):
         """Returns the song that is currently playing"""
         try:
-            return self.song_queue[0]
+            return self._song_queue[0]
         except:
             return None
 
     async def toggle_song_loop(self):
         """Toggles the current songs looping"""
         try:
-            song = self.song_queue[0]
+            song = self._song_queue[0]
         except:
             raise NotPlaying("Cannot loop because nothing is being played")
         if not song.is_looping:
@@ -303,7 +318,7 @@ class MusicPlayer(object):
         """Changes the volume of the player"""
         self.voice_client.source.volume = self.volume = vol
         try:
-            song = self.song_queue[0]
+            song = self._song_queue[0]
         except:
             raise NotPlaying(
                 "Cannot change volume because nothing is being played")
@@ -314,12 +329,18 @@ class MusicPlayer(object):
         """Removes a song from the queue"""
         if index == 0:
             try:
-                song = self.song_queue[0]
+                song = self._song_queue[0]
             except:
                 raise NotPlaying("Cannot loop because nothing is being played")
             await self.skip(force=True)
             return song
-        song = self.song_queue[index]
-        self.song_queue.pop(index)
+        song = self._song_queue[index]
+        self._song_queue.pop(index)
         self.bot.dispatch("disutils_music_remove_from_queue", self.ctx, song)
         return song
+
+    def shuffle_queue(self):
+        """Shuffles the queue"""
+        # The reason i don't just use random.shuffle is because the 0. element is the current song and should not be shuffled
+        self._song_queue = [self._song_queue[0], *
+                            random.sample(self._song_queue[1:], len(self._song_queue[1:]))]
