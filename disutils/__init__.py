@@ -1,4 +1,4 @@
-from . import Pagination
+from .Pagination import Paginator
 from .InviteTracker import InviteTracker
 from .Music import Music, EmptyQueue, NotConnectedToVoice, NotPlaying
 
