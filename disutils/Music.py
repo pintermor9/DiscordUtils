@@ -27,6 +27,7 @@ if has_voice:
     )
 
 
+# ANCHOR Exceptions
 class EmptyQueue(Exception):
     """Cannot skip because queue is empty"""
 
@@ -39,6 +40,7 @@ class NotPlaying(Exception):
     """Cannot <do something> because nothing is being played"""
 
 
+# ANCHOR Song
 class Song(object):
     def __init__(self, source: str, data: dict):
         self.source = source
@@ -153,6 +155,7 @@ def play_next(ctx, opts, music, after, loop):
                 source, after=lambda _e: after(ctx, opts, music, after, loop))
 
 
+# ANCHOR Music
 class Music(object):
     def __init__(self):
         if not has_voice:
@@ -179,6 +182,7 @@ class Music(object):
         return self.create_player(ctx)
 
 
+# ANCHOR MusicPlayer
 class MusicPlayer(object):
     def __init__(self, ctx, music):
         if not has_voice:
