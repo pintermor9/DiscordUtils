@@ -6,11 +6,24 @@
 Welcome to disutils's documentation!
 ====================================
 
+
+disutils is a helper library for discord.py (or py-cord).
+
+
+Features
+--------
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 1
+
+    Music utilities <music.rst>
+    Invite tracking <invitetracking.rst>
+    Embed pagination <pagination.rst>
 
 
+.. toctree:: 
+    :maxdepth: 2
+    
+    Quickstart <quickstart.rst>
 
 Indices and tables
 ==================

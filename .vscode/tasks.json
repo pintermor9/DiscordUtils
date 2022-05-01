@@ -6,8 +6,13 @@
         {
             "label": "upload",
             "type": "shell",
-            "command": "python3 setup.py sdist && twine upload dist/*",
+            "command": "python3 setup.py sdist && twine upload -r testpypi dist",
             "problemMatcher": []
+        },
+        {
+            "label": "gendocs",
+            "type": "shell",
+            "command": "cd docs/ && rm -f -r _build/ && make html"
         }
     ]
 }

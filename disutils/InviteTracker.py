@@ -1,3 +1,4 @@
+import discord
 from discord.errors import Forbidden
 from discord import AuditLogAction
 from datetime import datetime
@@ -8,16 +9,16 @@ class InviteTracker():
     def __init__(self, bot):
         self.bot = bot
         self._cache = {}
-        self.add_listeners()
+        self._add_listeners()
 
-    def add_listeners(self):
-        self.bot.add_listener(self.cache_invites, "on_ready")
-        self.bot.add_listener(self.update_invite_cache, "on_invite_create")
-        self.bot.add_listener(self.remove_invite_cache, "on_invite_delete")
-        self.bot.add_listener(self.add_guild_cache, "on_guild_join")
-        self.bot.add_listener(self.remove_guild_cache, "on_guild_remove")
+    def _add_listeners(self):
+        self.bot.add_listener(self._cache_invites, "on_ready")
+        self.bot.add_listener(self._update_invite_cache, "on_invite_create")
+        self.bot.add_listener(self._remove_invite_cache, "on_invite_delete")
+        self.bot.add_listener(self._add_guild_cache, "on_guild_join")
+        self.bot.add_listener(self._remove_guild_cache, "on_guild_remove")
 
-    async def cache_invites(self):
+    async def _cache_invites(self):
         for guild in self.bot.guilds:
             try:
                 self._cache[guild.id] = {}
@@ -26,12 +27,12 @@ class InviteTracker():
             except Forbidden:
                 continue
 
-    async def update_invite_cache(self, invite):
+    async def _update_invite_cache(self, invite):
         if invite.guild.id not in self._cache.keys():
             self._cache[invite.guild.id] = {}
         self._cache[invite.guild.id][invite.code] = invite
 
-    async def remove_invite_cache(self, invite):
+    async def _remove_invite_cache(self, invite):
         if invite.guild.id not in self._cache.keys():
             return
         ref_invite = self._cache[invite.guild.id][invite.code]
@@ -50,18 +51,37 @@ class InviteTracker():
         else:
             self._cache[invite.guild.id].pop(invite.code)
 
-    async def add_guild_cache(self, guild):
+    async def _add_guild_cache(self, guild):
         self._cache[guild.id] = {}
         for invite in await guild.invites():
             self._cache[guild.id][invite.code] = invite
 
-    async def remove_guild_cache(self, guild):
+    async def _remove_guild_cache(self, guild):
         try:
             self._cache.pop(guild.id)
         except KeyError:
             return
 
-    async def fetch_inviter(self, member):
+    async def fetch_inviter(self, member: discord.Member):
+        """Fetches the inviter of a **new** member.
+
+        .. warning:: 
+
+            This function can only be used on NEW members as discord does not provide the inviter of members. 
+            Use this inside the on_member_join event. 
+
+        .. code-block:: python3
+
+            @bot.event
+            async def on_member_join(member):
+                inviter = await self.fetch_inviter(member)
+                if inviter:
+                    print(f"{inviter.name} invited {member.name}")
+
+        :param member: The member to fetch the inviter of.
+        :return: The inviter of the member.
+        :rtype: Optional[discord.Member]"""
+
         await sleep(self.bot.latency)
         for new_invite in await member.guild.invites():
             for cached_invite in self._cache[member.guild.id].values():

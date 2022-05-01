@@ -1,5 +1,6 @@
-test.py
 __pycache__
-*.py[cod]
-dist
 *.egg-info
+*.py[cod]
+test.py
+_build
+dist
