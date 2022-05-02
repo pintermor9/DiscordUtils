@@ -1,9 +1,9 @@
 Music
 ====================
 
-.. currentmodule:: disutils.Music
+.. currentmodule:: disutils
 
-.. autoclass:: disutils.Music
+.. autoclass:: Music
    :members:
    :undoc-members:
 

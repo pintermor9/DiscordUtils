@@ -1,7 +1,7 @@
 Invite tracking
 ===============
 
-.. currentmodule:: disutils.InviteTracker
+.. currentmodule:: disutils
 
 .. autoclass:: InviteTracker
     :members:
