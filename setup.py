@@ -31,6 +31,10 @@ setuptools.setup(
     install_requires=dependencies,
     extras_require={
         "voice": ["youtube-dl"],
-        "docs": ["Sphinx==4.5.0", "sphinx-rtd-theme==1.0.0"]
+        "docs": [
+            "Sphinx==4.5.0",
+            "sphinx-rtd-theme==1.0.0",
+            "sphinxcontrib-napoleon==0.7.4",
+        ]
     },
 )
