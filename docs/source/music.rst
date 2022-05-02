@@ -3,7 +3,7 @@ Music
 
 .. currentmodule:: disutils.Music
 
-.. autoclass:: Music
+.. autoclass:: disutils.Music
    :members:
    :undoc-members:
 
