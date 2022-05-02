@@ -1,13 +1,15 @@
-import setuptools, re
+import setuptools
+import re
 
 dependencies = ["discord.py", "aiohttp"]
 
 with open("README.md", "r", encoding="utf-8", errors="ignore") as f:
     long_description = f.read()
 
-version = '' 
-with with open('./disutils/__init__.py') as f:
-    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
+version = ''
+with open('./disutils/__init__.py') as f:
+    version = re.search(
+        r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
 
 
 setuptools.setup(
@@ -27,5 +29,8 @@ setuptools.setup(
     python_requires=">= 3.6",
     include_package_data=True,
     install_requires=dependencies,
-    extras_require={"voice": dependencies + ["youtube-dl"]},
+    extras_require={
+        "voice": ["youtube-dl"],
+        "docs": ["Sphinx==4.5.0", "sphinx-rtd-theme==1.0.0"]
+    },
 )
