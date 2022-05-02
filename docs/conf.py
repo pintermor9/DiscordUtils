@@ -20,8 +20,10 @@ sys.path.insert(0, os.path.abspath('..'))
 project = 'disutils'
 copyright = '2022, pintermor9'
 author = 'pintermor9'
-version = __import__('disutils').__version__
 
+version = ""
+with open('../discord/__init__.py') as f:
+    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
 
 # -- General configuration ---------------------------------------------------
 
