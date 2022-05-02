@@ -34,7 +34,9 @@ setuptools.setup(
         "docs": [
             "Sphinx==4.5.0",
             "sphinx-rtd-theme==1.0.0",
-            "sphinxcontrib-napoleon==0.7.4",
+            "sphinxcontrib-napoleon==0.7",
+            "sphinxcontrib_trio==1.1.2",
+            "typing-extensions"
         ]
     },
 )
