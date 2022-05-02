@@ -1,4 +1,4 @@
-import setuptools
+import setuptools, re
 
 dependencies = ["discord.py", "aiohttp"]
 
