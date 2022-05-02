@@ -9,6 +9,4 @@ sphinx:
   configuration: docs/source/conf.py
 
 python:
-  install:
-    - method: pip
-      path: .
+  install: [git+https://www.github.com/pintermor9/disutils]
