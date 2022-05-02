@@ -9,4 +9,8 @@ sphinx:
   configuration: docs/source/conf.py
 
 python:
-  install: [git+https://www.github.com/pintermor9/disutils]
+  install:
+    - method: pip
+      path: .
+      extra_requirements:
+        - docs
