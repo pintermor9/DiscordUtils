@@ -10,8 +10,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 
-import os
-import sys
+import os, sys, re
 sys.path.insert(0, os.path.abspath('..'))
 
 
@@ -21,7 +20,7 @@ project = 'disutils'
 copyright = '2022, pintermor9'
 author = 'pintermor9'
 
-version = ""
+version = '' 
 with open('../disutils/__init__.py') as f:
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
 
