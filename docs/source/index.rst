@@ -13,7 +13,7 @@ disutils is a helper library for discord.py (or py-cord).
 Features
 --------
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
     Music utilities <music.rst>
     Invite tracking <invitetracking.rst>
@@ -25,9 +25,3 @@ Features
     
     Quickstart <quickstart.rst>
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
