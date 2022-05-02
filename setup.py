@@ -1,14 +1,18 @@
 import setuptools
-import disutils
 
 dependencies = ["discord.py", "aiohttp"]
 
 with open("README.md", "r", encoding="utf-8", errors="ignore") as f:
     long_description = f.read()
 
+version = '' 
+with with open('./disutils/__init__.py') as f:
+    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
+
+
 setuptools.setup(
     name="disutils",
-    version=disutils.__version__,
+    version=version,
     author="pintermor9",
     description="disutils is a very useful library made to be used with discord.py",
     long_description=long_description,
