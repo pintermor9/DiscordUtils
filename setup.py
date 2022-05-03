@@ -36,7 +36,8 @@ setuptools.setup(
             "sphinx-rtd-theme==1.0.0",
             "sphinxcontrib-napoleon==0.7",
             "sphinxcontrib_trio==1.1.2",
-            "typing-extensions"
+            "typing-extensions", 
+            "py-cord==2.0.0b7"
         ]
     },
 )
