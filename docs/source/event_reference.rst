@@ -69,7 +69,7 @@ disutils' custom events
 
     .. tip::
 
-        If you want to know if the player is looping, use :attr:`Song.is_looping`.
+        If you want to know if the player is looping, use :attr:`disutils.Song.is_looping`.
 
 .. function:: on_disutils_music_queue_remove(ctx: discord.Context, song: disutils.Song)
 
