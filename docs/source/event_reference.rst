@@ -1,5 +1,3 @@
-.. currentmodule:: disutils
-
 Event reference
 ====================
 
