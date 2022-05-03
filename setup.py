@@ -1,7 +1,7 @@
 import setuptools
 import re
 
-dependencies = ["aiohttp"]
+dependencies = ["aiohttp", "asyncio", ]
 
 with open("README.md", "r", encoding="utf-8", errors="ignore") as f:
     long_description = f.read()
