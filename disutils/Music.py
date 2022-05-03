@@ -49,8 +49,15 @@ class YoutubeError(Exception):
 class Song:
     def __init__(self, source: str, data: dict):
         self.source = source
+        """The source of the song"""
         self.data = data
+        """The data of the song which youtube_dl returns.
+
+        .. tip::
+
+            You can also access the data using ``Song.key`` and you don't need to use ``Song.data['key']``"""
         self.is_looping = False
+        """Whether the song is looping"""
 
     def __getattribute__(self, __name: str):
         """Get the attribute from self or from self.data"""
@@ -341,7 +348,7 @@ class MusicPlayer:
             return song
         song = self._song_queue[index]
         self._song_queue.pop(index)
-        self._bot.dispatch("disutils_music_remove_from_queue", self._ctx, song)
+        self._bot.dispatch("disutils_music_queue_remove", self._ctx, song)
         return song
 
     def shuffle_queue(self):
@@ -349,3 +356,4 @@ class MusicPlayer:
         # The reason i don't just use random.shuffle is because the 0. element is the current song and should not be shuffled
         self._song_queue = [self._song_queue[0], *
                             random.sample(self._song_queue[1:], len(self._song_queue[1:]))]
+        self._bot.dispatch("disutils_music_queue_shuffle", self._ctx)

@@ -33,6 +33,7 @@ Manuals
     Music utilities <music.rst>
     Invite tracking <invitetracking.rst>
     Embed pagination <pagination.rst>
+    Event reference <event_reference.rst>
 
 Future
 ------
