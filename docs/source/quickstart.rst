@@ -7,14 +7,9 @@ Installation
 
     pip install disutils
 
-.. note:: 
+.. info:: 
 
-    If you want to use this with py-cord, you will need to reinstall py-cord after this installation:
-
-    .. code-block:: bash
-
-        pip uninstall discord.py py-cord
-        pip install py-cord
+    discord.py is not listed on the library's requirements, due to installing discord.py on top of py-cord can cause wierd bugs. You need to install one of them yourself! 
 
 
 Music
