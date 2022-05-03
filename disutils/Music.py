@@ -181,7 +181,7 @@ class Music:
                 "disutils[voice] install needed in order to use voice")
         self._players = []  # List of MusicPlayers
 
-    def create_player(self, ctx, **kwargs):
+    def create_player(self, ctx):
         """This creates a new MusicPlayer. 
 
         .. versionchanged:: 1.4.5
@@ -191,7 +191,7 @@ class Music:
             raise NotConnectedToVoice(
                 "Cannot create the player because bot is not connected to voice"
             )
-        player = MusicPlayer(ctx, self, **kwargs)
+        player = MusicPlayer(ctx, self)
         self._players.append(player)
         return player
 
@@ -205,7 +205,7 @@ class Music:
 
 # ANCHOR MusicPlayer
 class MusicPlayer:
-    def __init__(self, ctx, music):
+    def __init__(self, ctx, music: Music):
         if not has_voice:
             raise RuntimeError(
                 "disutils[voice] install needed in order to use voice")
