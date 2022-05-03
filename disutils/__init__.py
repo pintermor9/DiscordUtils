@@ -1,4 +1,4 @@
-from .Pagination import Paginator
+from .Pagination import Paginator, v1_x_Paginator, v2_x_Paginator
 from .InviteTracker import InviteTracker
 from .Music import Music, MusicPlayer, get_video_data, Song, EmptyQueue, NotConnectedToVoice, NotPlaying
 
