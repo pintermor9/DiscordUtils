@@ -7,7 +7,7 @@ Installation
 
     pip install disutils
 
-.. info:: 
+.. warning:: 
 
     discord.py is not listed on the library's requirements, due to installing discord.py on top of py-cord can cause wierd bugs. You need to install one of them yourself! 
 
