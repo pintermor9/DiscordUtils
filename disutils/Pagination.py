@@ -71,9 +71,18 @@ class v1_x_Paginator:
             await self.message.delete()
 
 
-# TODO do it with 2.0 discord.View
 class v2_x_Paginator(v1_x_Paginator):
-    pass
+    """Paginator for v2.0 discord.View"""
+
+    def __init__(self, ctx, pages: List[discord.Embed], auto_footer: bool = False, commands: dict = {"⏮️": "first", "⏪": "previous", "⏹": "stop", "⏩": "next", "⏭️": "last"}, timeout: float = 60.0, on_stop: Literal["remove_buttons", "disable_buttons", "delete_message", None] = None, start_page: int = 0):
+        self.view = discord.ui.View(self._generate_buttons(commands), timeout)
+        super().__init__(ctx, pages, auto_footer, commands, timeout, on_stop, start_page)
+
+    def _generate_buttons(self, commands: dict):
+        buttons = []
+        for command in commands:
+            buttons.append(discord.ui.Button(...))  # TODO
+        return buttons
 
 
 if discord.version_info.major == 1:
