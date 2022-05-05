@@ -72,17 +72,79 @@ class v1_x_Paginator:
 
 
 class v2_x_Paginator(v1_x_Paginator):
-    """Paginator for v2.0 discord.View"""
+    def __init__(self, ctx, pages: List[discord.Embed], auto_footer: bool = False, commands: dict = {"⏮️": "first", "⏪": "previous", "⏹": "stop", "⏩": "next", "⏭️": "last"}, timeout: float = 60.0, on_stop: Literal["remove_buttons", "disable_buttons", "delete_message", None] = None, start_page: int = 0, button_style: discord.ButtonStyle = discord.ButtonStyle.primary, stop_button_style: discord.ButtonStyle = discord.ButtonStyle.danger):
+        self.button_style = button_style
+        self.stop_button_style = stop_button_style
 
-    def __init__(self, ctx, pages: List[discord.Embed], auto_footer: bool = False, commands: dict = {"⏮️": "first", "⏪": "previous", "⏹": "stop", "⏩": "next", "⏭️": "last"}, timeout: float = 60.0, on_stop: Literal["remove_buttons", "disable_buttons", "delete_message", None] = None, start_page: int = 0):
-        self.view = discord.ui.View(self._generate_buttons(commands), timeout)
+        self.view = discord.ui.View(
+            *self._generate_buttons(commands), timeout=timeout)
+        self.view.on_timeout = self.stop
+
         super().__init__(ctx, pages, auto_footer, commands, timeout, on_stop, start_page)
 
     def _generate_buttons(self, commands: dict):
-        buttons = []
-        for command in commands:
-            buttons.append(discord.ui.Button(...))  # TODO
-        return buttons
+        self.buttons = []
+        for emoji, command in zip(commands.keys(), commands.values()):
+            button = discord.ui.Button(
+                emoji=emoji, style=self.stop_button_style if command == "stop" else self.button_style)
+            button.callback = self._get_callback(command)
+            self.buttons.append(button)
+        return self.buttons
+
+    def _get_callback(self, command):
+        async def _callback(interaction):
+            await self._handle_command(command, interaction)
+        return _callback
+
+    async def run(self):
+        if self.auto_footer:
+            for page in self.pages:
+                page.set_footer(
+                    text=f"Page {self.pages.index(page) + 1} of {len(self.pages)}")
+
+        self.message = await self.ctx.send(embed=self.pages[self.current_page], view=self.view)
+
+    async def _handle_command(self, command, interaction):
+        if command == "stop":
+            await interaction.response.defer()
+            return await self.stop()
+
+        elif command == "first":
+            self.current_page = 0
+
+        elif command == "previous":
+            if self.current_page > 0:
+                self.current_page -= 1
+
+        elif command == "next":
+            if self.current_page < len(self.pages) - 1:
+                self.current_page += 1
+
+        elif command == "last":
+            self.current_page = len(self.pages) - 1
+
+        elif command.startswith("page"):
+            try:
+                page = int(command.split("page")[1])
+                if page > 0 and page <= len(self.pages):
+                    self.current_page = page - 1
+            except:
+                raise ValueError("Invalid page number")
+
+        await interaction.response.edit_message(embed=self.pages[self.current_page])
+
+    async def stop(self):
+        if self.on_stop == "remove_buttons":
+            await self.message.edit(view=None)
+        elif self.on_stop == "disable_buttons":
+            for button in self.buttons:
+                button.disabled = True
+            await self.message.edit(view=discord.ui.View(*self.buttons))
+        elif self.on_stop == "delete_message":
+            await self.message.delete()
+
+        if not self.view.is_finished():
+            self.view.stop()
 
 
 if discord.version_info.major == 1:
