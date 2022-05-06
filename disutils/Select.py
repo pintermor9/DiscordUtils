@@ -4,9 +4,7 @@ import discord
 
 
 class MultipleChoice:
-    __slots__ = ("embed", "question", "choices")
-
-    def __init__(self, ctx=None, question: Union[discord.Embed, str] = "Yes or no?", choices: Union[list, tuple] = (":+1:", ":-1:"), timeout: float = 30.0):
+    def __init__(self, ctx=None, question: Union[discord.Embed, str] = "Yes or no?", choices: Union[list, tuple] = ("👍", "👎"), timeout: float = 30.0):
         """This is the initializer for the MultipleChoice class.
 
         :param ctx: The context to run the class in. It doesn't have to be provided, but if it isn't, it must be provided to the run() method.
@@ -45,4 +43,14 @@ class MultipleChoice:
 
 
 class Confirm(MultipleChoice):
-    pass
+    def __init__(self, ctx=None, question: Union[discord.Embed, str] = "Yes or no?", timeout: float = 30.0):
+        super().__init__(ctx, question, choices=("✅", "❌"), timeout=timeout)
+
+    async def run(self, ctx=None):
+        sret = await super().run(ctx)
+        if sret == 0:
+            return True
+        elif sret == 1:
+            return False
+        else:
+            return None
