@@ -198,7 +198,7 @@ class Music:
     def get_player(self, ctx):
         """This gets the player from the ctx or creates a new one if there is none in that context"""
         for player in self._players:
-            if player.voice_client.channel == ctx.voice_client.channel:
+            if player._voice_client.channel == ctx.voice_client.channel:
                 return player
         return self.create_player(ctx)
 
