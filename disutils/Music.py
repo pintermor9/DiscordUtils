@@ -259,8 +259,6 @@ class MusicPlayer:
 
     async def skip(self, force=True):
         """This skips the current song"""
-        if len(self._song_queue) == 0:
-            raise NotPlaying("Cannot loop because nothing is being played")
         elif not len(self._song_queue) > 1 and not force:
             raise EmptyQueue("Cannot skip because queue is empty")
         else:
@@ -282,7 +280,7 @@ class MusicPlayer:
             self._voice_client.stop()
             self._music.players.remove(self)
         except:
-            raise NotPlaying("Cannot loop because nothing is being played")
+            raise NotPlaying("Cannot stop because nothing is being played")
         self._bot.dispatch("disutils_music_stop", self._ctx)
 
     async def pause(self):
