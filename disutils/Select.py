@@ -43,14 +43,9 @@ class MultipleChoice:
 
 
 class Confirm(MultipleChoice):
-    def __init__(self, ctx=None, question: Union[discord.Embed, str] = "Yes or no?", timeout: float = 30.0):
+    def __init__(self, ctx=None, question: Union[discord.Embed, str] = "Are you sure?", timeout: float = 30.0):
         super().__init__(ctx, question, choices=("✅", "❌"), timeout=timeout)
 
     async def run(self, ctx=None):
-        sret = await super().run(ctx)
-        if sret == 0:
-            return True
-        elif sret == 1:
-            return False
-        else:
-            return None
+        ret = await super().run(ctx)
+        return bool(ret) if type(ret) == int else None
