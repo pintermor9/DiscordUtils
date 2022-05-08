@@ -4,6 +4,6 @@ from .Music import Music, MusicPlayer, get_video_data, Song, EmptyQueue, NotConn
 from .Select import MultipleChoice, Confirm
 
 __title__ = "disutils"
-__version__ = "1.4.31"
+__version__ = "1.4.32"
 __author__ = "toxicrecker"
 __license__ = "MIT"
