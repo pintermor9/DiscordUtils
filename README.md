@@ -1,6 +1,8 @@
 # disutils
 
-A very useful library made to be used with [discord.py or pycord](https://pypi.org/project/discord.py/)
+A very useful library made to be used with [discord.py](https://pypi.org/project/discord.py/).
+
+*Note:* This library DOES NOT support forks of discord.py. 
 
 This is a fixed and enhanced fork of [toxicracker's DiscordUtils](https://github.com/toxicrecker/DiscordUtils)
 
