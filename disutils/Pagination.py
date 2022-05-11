@@ -76,8 +76,9 @@ class v2_x_Paginator(v1_x_Paginator):
         self.button_style = button_style
         self.stop_button_style = stop_button_style
 
-        self.view = discord.ui.View(
-            *self._generate_buttons(commands), timeout=timeout)
+        self.view = discord.ui.View(timeout=timeout)
+        for button in self._generate_buttons(commands):
+            self.view.add_item(button)
         self.view.on_timeout = self.stop
 
         super().__init__(ctx, pages, auto_footer, commands, timeout, on_stop, start_page)
