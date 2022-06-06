@@ -5,6 +5,8 @@ from warnings import warn
 import aiohttp
 import re
 
+from .Managers import SingletonManager
+
 try:
     import youtube_dl
     import discord
@@ -187,7 +189,7 @@ def _play_next(ctx, opts, music, after, loop):
 
 
 # ANCHOR Music
-class Music:
+class MusicManager(SingletonManager):
     def __init__(self):
         if not has_voice:
             raise RuntimeError(
@@ -215,10 +217,40 @@ class Music:
                 return player
         return self.create_player(ctx)
 
+    '''def command(self, func):
+        """Utility shortcut decorator for music commands.
+        Easy way of getting the player associated with the context.
+
+        Before:
+        .. code-block:: python3
+
+            @commands.command()
+            async def stop(ctx, *, query): 
+                player = music.get_player(ctx)
+                await player.stop(query)
+
+        After:
+        .. code-block:: python3
+
+            @commands.command()
+            @music.command
+            async def stop(ctx, player, *, query):
+                await player.stop(ctx, query)
+
+        .. versionadded:: 1.4.5"""
+        # FIXME wtf is this shit i don't even know im dumb fuck this
+        async def wrapper(ctx, *args, **kwargs):
+            if not has_voice:
+                raise RuntimeError(
+                    "disutils[voice] install needed in order to use voice")
+            player = self.get_player(ctx)
+            return await func(ctx, player, *args, **kwargs)
+        return wrapper'''
+
 
 # ANCHOR MusicPlayer
 class MusicPlayer:
-    def __init__(self, ctx, music: Music):
+    def __init__(self, ctx, music: MusicManager):
         if not has_voice:
             raise RuntimeError(
                 "disutils[voice] install needed in order to use voice")
