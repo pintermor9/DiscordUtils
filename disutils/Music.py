@@ -1,3 +1,5 @@
+# TODO Totally redo this later. For now it works XD
+
 import random
 from warnings import warn
 import aiohttp
@@ -76,6 +78,17 @@ async def ytbettersearch(query):
     This is a workaround for youtube-dl's stupid search engine."""
 
     url = f"https://www.youtube.com/results?search_query={query}"
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as resp:
+            html = await resp.text()
+    regex = r"(?<=watch\?v=)\w+"
+    v = re.search(regex, html).group()
+    url = f"https://www.youtube.com/?v={v}"
+    return url
+
+
+async def get_next(song: Song):
+    url = f"https://www.youtube.com/watch?v={song.id}"
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as resp:
             html = await resp.text()
