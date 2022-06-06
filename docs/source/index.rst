@@ -28,9 +28,9 @@ Quickstart
 Manuals
 -------
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 3
 
-    Music utilities <music.rst>
+    Managers <managers.rst>
     Invite tracking <invitetracking.rst>
     Embed pagination <pagination.rst>
     Event reference <event_reference.rst>

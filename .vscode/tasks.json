@@ -12,7 +12,7 @@
         {
             "label": "gendocs",
             "type": "shell",
-            "command": "cd docs/ && rm -f -r _build/ && make html"
+            "command": "cd docs/ && rm -f -r build/ && make html"
         }
     ]
 }
