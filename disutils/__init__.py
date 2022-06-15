@@ -2,8 +2,9 @@ from .Pagination import Paginator, v1_x_Paginator, v2_x_Paginator
 from .InviteTracker import InviteTracker
 from .Select import MultipleChoice, Confirm
 
-from .Managers.MusicManager import MusicManager, MusicPlayer, get_video_data, Song, EmptyQueue, NotConnectedToVoice, NotPlaying
+from .Managers.EventHandler import EventHandler, CogEventHandler
 from .Managers.LevellingManager import LevellingManager
+from .Managers.MusicManager import MusicManager, MusicPlayer, get_video_data, Song, EmptyQueue, NotConnectedToVoice, NotPlaying
 
 __title__ = "disutils"
 __version__ = "1.4.32.post2"

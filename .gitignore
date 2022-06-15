@@ -1,6 +1,7 @@
 __pycache__
 *.egg-info
 *.py[cod]
+token.txt
 test.py
 build
 dist

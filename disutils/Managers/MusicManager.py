@@ -217,36 +217,6 @@ class MusicManager(SingletonManager):
                 return player
         return self.create_player(ctx)
 
-    '''def command(self, func):
-        """Utility shortcut decorator for music commands.
-        Easy way of getting the player associated with the context.
-
-        Before:
-        .. code-block:: python3
-
-            @commands.command()
-            async def stop(ctx, *, query): 
-                player = music.get_player(ctx)
-                await player.stop(query)
-
-        After:
-        .. code-block:: python3
-
-            @commands.command()
-            @music.command
-            async def stop(ctx, player, *, query):
-                await player.stop(ctx, query)
-
-        .. versionadded:: 1.4.5"""
-        # FIXME wtf is this shit i don't even know im dumb fuck this
-        async def wrapper(ctx, *args, **kwargs):
-            if not has_voice:
-                raise RuntimeError(
-                    "disutils[voice] install needed in order to use voice")
-            player = self.get_player(ctx)
-            return await func(ctx, player, *args, **kwargs)
-        return wrapper'''
-
 
 # ANCHOR MusicPlayer
 class MusicPlayer:
@@ -281,7 +251,7 @@ class MusicPlayer:
         """Adds the query to the queue"""
         song = await get_video_data(self, query, bettersearch, self._loop)
         self._song_queue.append(song)
-        self._bot.dispatch("disutils_music_queue", self._ctx, song)
+        self.dipatch("queue", self._ctx, song)
         return song
 
     async def play(self):
@@ -299,7 +269,7 @@ class MusicPlayer:
             ),
         )
         song = self._song_queue[0]
-        self._bot.dispatch("disutils_music_play", self._ctx, song)
+        self.dipatch("play", self._ctx, song)
         return song
 
     async def skip(self, force=True):
@@ -312,10 +282,10 @@ class MusicPlayer:
             self._voice_client.stop()
             try:
                 new = self._song_queue[1]
-                self._bot.dispatch("disutils_music_skip", self._ctx, old, new)
+                self.dipatch("skip", self._ctx, old, new)
                 return (old, new)
             except IndexError:
-                self._bot.dispatch("disutils_music_skip", self._ctx, old, None)
+                self.dipatch("skip", self._ctx, old, None)
                 return (old, None)
 
     async def stop(self):
@@ -327,7 +297,7 @@ class MusicPlayer:
         except Exception as e:
             raise e
             raise NotPlaying("Cannot stop because nothing is being played")
-        self._bot.dispatch("disutils_music_stop", self._ctx)
+        self.dipatch("stop", self._ctx)
 
     async def pause(self):
         """Pauses the player"""
@@ -336,7 +306,7 @@ class MusicPlayer:
             song = self._song_queue[0]
         except:
             raise NotPlaying("Cannot pause because nothing is being played")
-        self._bot.dispatch("disutils_music_pause", self._ctx, song)
+        self.dipatch("pause", self._ctx, song)
         return song
 
     async def resume(self):
@@ -346,7 +316,7 @@ class MusicPlayer:
             song = self._song_queue[0]
         except:
             raise NotPlaying("Cannot resume because nothing is being played")
-        self._bot.dispatch("disutils_music_resume", self._ctx, song)
+        self.dipatch("resume", self._ctx, song)
         return song
 
     def now_playing(self):
@@ -366,7 +336,7 @@ class MusicPlayer:
             song.is_looping = True
         else:
             song.is_looping = False
-        self._bot.dispatch("disutils_music_toggle_loop", self._ctx, song)
+        self.dipatch("toggle_loop", self._ctx, song)
         return song
 
     async def change_volume(self, vol: float):
@@ -377,8 +347,8 @@ class MusicPlayer:
         except:
             raise NotPlaying(
                 "Cannot change volume because nothing is being played")
-        self._bot.dispatch("disutils_music_volume_change",
-                           self._ctx, song, vol)
+        self.dipatch("volume_change",
+                     self._ctx, song, vol)
         return (song, vol)
 
     async def remove_from_queue(self, index):
@@ -393,7 +363,7 @@ class MusicPlayer:
             return song
         song = self._song_queue[index]
         self._song_queue.pop(index)
-        self._bot.dispatch("disutils_music_queue_remove", self._ctx, song)
+        self.dipatch("queue_remove", self._ctx, song)
         return song
 
     def shuffle_queue(self):
@@ -401,4 +371,4 @@ class MusicPlayer:
         # The reason i don't just use random.shuffle is because the 0. element is the current song and should not be shuffled
         self._song_queue = [self._song_queue[0], *
                             random.sample(self._song_queue[1:], len(self._song_queue[1:]))]
-        self._bot.dispatch("disutils_music_queue_shuffle", self._ctx)
+        self.dipatch("queue_shuffle", self._ctx)
