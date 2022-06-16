@@ -46,8 +46,3 @@ class EventHandler:
             return
         for listener in self.listeners[event]:
             asyncio.ensure_future(listener(*args, **kwargs))
-
-
-class CogEventHandler:
-    def __init__(self, Manager, bot):
-        self.Manager = Manager(bot)
