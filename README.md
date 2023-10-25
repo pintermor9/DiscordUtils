@@ -1,5 +1,7 @@
 # disutils
 
+<b style="color: red;">THIS REPOSITORY IS NOT MAINTAINED ANYMORE!</b>
+
 A very useful library made to be used with [discord.py](https://pypi.org/project/discord.py/).
 
 *Note:* This library DOES NOT support forks of discord.py. 
